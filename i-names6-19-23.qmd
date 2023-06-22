@@ -1,5 +1,5 @@
 ---
-title: "i-names6-19-23"
+title: "Baby names ending in i"
 author: "Joshua Laborde"
 format: html
 execute: 
@@ -18,7 +18,22 @@ baby<-read_csv("data/i_names.csv", show_col_types = FALSE)
 
 ```{r}
 #| message: false
-baby |> ggplot  
+baby |> ggplot(aes(x=year,y=n,color=sex,.by=sex)) + 
+    geom_line() + 
+      scale_y_log10() + 
+        labs(x="Year",y="# of Babies")
   
+```
+
+```{r}
+#| message: false
+baby |> summarise(sum_n=sum(n), 
+                    .by = c(year,sex), 
+                      sum_prop = (sum(prop))) |>
+  ggplot(aes(x=year,y=sum_prop,fill=sex, .by=sex)) + 
+    geom_area() + 
+        labs(x="Year",y="% of babies w/i-name", title="") + 
+          scale_y_continuous(
+            labels = scales::percent_format())
 ```
 
